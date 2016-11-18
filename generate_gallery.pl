@@ -20,7 +20,13 @@ sub main{
 					} else {
 						open (OUT, ">", "output_".$file_number*$files_per_segment.".html");
 					}
-					print  OUT '<html><head><link rel="stylesheet" href="main.css" type="text/css"></head>'."\n<body>\n<table>\n<tr>\n <td><div class=\"bookmarks\"> <a href=\"output_".($file_number - 1)* $files_per_segment.".html#page_end\"> Prev </a></div></td>";
+					if ($file_number == 1 ) {
+						print  OUT '<html><head><link rel="stylesheet" href="main.css" type="text/css"></head>'."\n<body>\n<table>\n<tr>\n";
+					} elsif ($file_number == 2 ) {
+						print  OUT '<html><head><link rel="stylesheet" href="main.css" type="text/css"></head>'."\n<body>\n<table>\n<tr>\n <td><div class=\"bookmarks\"> <a href=\"output_index.html#page_end\"> Prev </a></div></td>";
+					}else {
+						print  OUT '<html><head><link rel="stylesheet" href="main.css" type="text/css"></head>'."\n<body>\n<table>\n<tr>\n <td><div class=\"bookmarks\"> <a href=\"output_".($file_number - 1) * $files_per_segment.".html#page_end\"> Prev </a></div></td>";
+					}
 				}
 				
 				if ($file =~ /\.jpg/)
