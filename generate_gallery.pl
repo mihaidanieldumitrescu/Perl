@@ -1,14 +1,15 @@
-use warnings;
 use strict;
+use warnings;
 
 my $files_per_segment=100;
 my $file_index=1;
 my $file_number=1;
 
-sub main{
+sub generate{
 	
 	my $dirname = shift;
-	opendir (PIC, $dirname);
+	print "Generating html gallery for \"$dirname\"\n\n";
+	opendir (PIC, $dirname) or die "\n$! \n Cannot open dir\n";
 	
 		while (my $file =readdir(PIC)){
 			if ( $file_index < $file_number * $files_per_segment){
@@ -16,9 +17,9 @@ sub main{
 				if ($file_index == 1 + (($file_number - 1) * $files_per_segment) and $file =~ /\.jpg/){
 					print "Opening file output_$file_number.html at $file_index\n";
 					if ($file_number == 1){
-						open (OUT, ">", "output_index.html");	
+						open (OUT, ">", ".\\$dirname\\output_index.html");	
 					} else {
-						open (OUT, ">", "output_".$file_number*$files_per_segment.".html");
+						open (OUT, ">", ".\\$dirname\\output_".$file_number*$files_per_segment.".html");
 					}
 					if ($file_number == 1 ) {
 						print  OUT '<html><head><link rel="stylesheet" href="main.css" type="text/css"></head>'."\n<body>\n<table>\n<tr>\n";
@@ -55,4 +56,8 @@ sub main{
 	closedir(PIC);
 }
 
-main(".");
+if (@ARGV ==1 and $ARGV[0]){
+	generate($ARGV[0]);
+} else {
+	warn "Something definetely wrong. Please check if ARGV exists and is valid";
+}
