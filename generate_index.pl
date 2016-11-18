@@ -54,7 +54,7 @@ return $count;
 
 sub generate{
 	my $arg = shift;
-	system ("perl -w generate_split.pl $arg");
+	system ("perl -w generate_gallery.pl $arg");
 }
 
 sub generate_simple{
