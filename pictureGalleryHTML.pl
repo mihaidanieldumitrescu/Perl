@@ -7,7 +7,7 @@ use File::Copy;
   
 my @filelist;
 my $heightSize = 650;
-my $files_per_segment=100;
+my $files_per_segment=30;
 
 my $picture_ref = {	
 						pictures =>  []	
@@ -28,11 +28,11 @@ sub generateNavigationBar {
 	my @pages;
 	
  
-	my $index =100;
+	my $index = $files_per_segment;
 	push @pages, "output_index.html";
 	while ($index <= $pictureCount ) {
 		push @pages, "output_$index.html";
-		$index += 100;
+		$index += $files_per_segment;
 	}
 	#generate array of pages e.g. "output_300.html from pictures"
 	
@@ -51,7 +51,7 @@ sub generateNavigationBar {
 				if ($1 < 1000){
 					$naviBar .= '
 						<li>
-							<a class="active"> Page '.$1.'-'.($1+99).'</a>
+							<a class="active"> Page '.$1.'-'.($1+ ($files_per_segment - 1)).'</a>
 						</li>';
 				} elsif ($1 == 1000) {
 						$naviBar .= '<li>
@@ -62,12 +62,12 @@ sub generateNavigationBar {
 						<div class="hidden-menu">
 							<ul>
 								<li>
-									<a class="active"> Page '.$1.'-'.($1+99).'</a>
+									<a class="active"> Page '.$1.'-'.($1+($files_per_segment - 1)).'</a>
 								</li>';
 				} else {
 						$naviBar .= '
 						<li>
-							<a class="active"> Page '.$1.'-'.($1+99).'</a>
+							<a class="active"> Page '.$1.'-'.($1+($files_per_segment - 1)).'</a>
 						</li>';
 				}
 			} else {
@@ -76,7 +76,7 @@ sub generateNavigationBar {
 				if ($1 < 1000){
 					$naviBar .= '
 				<li>
-					<a href="'. (($1 eq "1") ? "output_index.html" : $page).'"> Page '.$1.'-'.($1+99).' </a>
+					<a href="'. (($1 eq "1") ? "output_index.html" : $page).'"> Page '.$1.'-'.($1+($files_per_segment - 1)).' </a>
 				</li>';}
 				elsif ($1 == 1000) {
 					$naviBar .= '<li>
@@ -86,11 +86,11 @@ sub generateNavigationBar {
 						</ul>
 							</div>
 							<div class="hidden-menu"><ul>
-										<li><a href="'. (($1 eq "1") ? "output_index.html" : $page).'">Page '.$1.'-'.($1+99).'</a></li>';
+										<li><a href="'. (($1 eq "1") ? "output_index.html" : $page).'">Page '.$1.'-'.($1+($files_per_segment - 1)).'</a></li>';
 				} else {
 					$naviBar .= '
 							<li>
-								<a href="'. (($1 eq "1") ? "output_index.html" : $page).'">Page '.$1.'-'.($1+99).'</a>
+								<a href="'. (($1 eq "1") ? "output_index.html" : $page).'">Page '.$1.'-'.($1+($files_per_segment - 1)).'</a>
 							</li>';
 					}
 			}   
@@ -189,8 +189,8 @@ sub generate {
 						open (GEN, ">", ".\\$dirname\\GalleryHTML\\output_index.html");
 						$currentPageName ="output_index.html";
 					} else {						
-						open (GEN, ">", ".\\$dirname\\GalleryHTML\\output_".(($file_number*$files_per_segment)-100).".html");
-						$currentPageName ="output_".(($file_number*$files_per_segment)-100).".html";
+						open (GEN, ">", ".\\$dirname\\GalleryHTML\\output_".(($file_number*$files_per_segment)-$files_per_segment).".html");
+						$currentPageName ="output_".(($file_number*$files_per_segment)-$files_per_segment).".html";
 					}
 					
 					if ($file_number == 1 ) {
@@ -198,7 +198,7 @@ sub generate {
 					} elsif ($file_number == 2 ) {
 						print  GEN '<html><head><link rel="stylesheet" href="../../main.css" type="text/css"></head>'."\n<body>\n<table>\n<tr>\n <td><div class=\"bookmarks\"> <a href=\"output_index.html#page_end\"> Prev </a></div></td>";
 					} else {
-						print  GEN '<html><head><link rel="stylesheet" href="../../main.css" type="text/css"></head>'."\n<body>\n<table>\n<tr>\n <td><div class=\"bookmarks\"> <a href=\"output_".(($file_number - 1) * $files_per_segment-100).".html#page_end\"> Prev </a></div></td>";
+						print  GEN '<html><head><link rel="stylesheet" href="../../main.css" type="text/css"></head>'."\n<body>\n<table>\n<tr>\n <td><div class=\"bookmarks\"> <a href=\"output_".(($file_number - 1) * $files_per_segment-$files_per_segment).".html#page_end\"> Prev </a></div></td>";
 					}
 					
 					print GEN generateNavigationBar( scalar (@pictures), $currentPageName);
@@ -217,7 +217,7 @@ sub generate {
 					print GEN resizeImage($dirname, $file);
 					$file_index++;
 				}
-					print GEN "<td><div class=\"bookmarks\">  <a name=\"page_end\" href=\"output_".(($file_number + 1)*$files_per_segment-100).".html\"> Next </a></div></td></tr>\n</table>\n</body>\n</html>\n";
+					print GEN "<td><div class=\"bookmarks\">  <a name=\"page_end\" href=\"output_".(($file_number + 1)*$files_per_segment-$files_per_segment).".html\"> Next </a></div></td></tr>\n</table>\n</body>\n</html>\n";
 					print "Closing file output_$file_number.html at $file_index\n\n";
 	
 					close(GEN);
@@ -234,7 +234,7 @@ sub generate {
 			$buffer .=	"<script> $asJSarray 
 
 							document.write ('<table><tr>');
-							for (var i =0; i < 10; i++){
+							for (var i =0; i < $files_per_segment; i++){
 								imageName = pictures[Math.floor(Math.random()*pictures.length)];
 								document.write (\"<td><img src=\" + \"../Resized/\" + imageName + \" height=\'$heightSize\'></img></td>\");	
 							}
