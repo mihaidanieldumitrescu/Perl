@@ -1,1 +1,46 @@
+body {margin-top:60px;}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 6px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+div.hidden-menu {
+    display:none;
+}
+
+li a.menu:hover {
+    background-color: #4CAF50;
+    display: block;
+}
+
+li a:hover:not(.active) hidden-menu {
+    display: block;
+}
+
+.active {
+    background-color: #4CAF50;
+}
 

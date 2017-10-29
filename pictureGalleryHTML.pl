@@ -43,17 +43,20 @@ sub generateNavigationBar {
 		<ul>
 		    <li>
 				<a href="../../index.html">Home</a>
+			</li>
+			<li>
+				<a href="#">Pages:</a>
 			</li>';
 		foreach my $page (@pages) {
 			if ($page eq $currentPage){
 			    $page =~ s/index/1/; # index is page 1
 				$page =~ /(\d+)/;
-				if ($1 < 1000){
+				if ($1 < 300){
 					$naviBar .= '
 						<li>
-							<a class="active"> Page '.$1.'-'.($1+ ($files_per_segment - 1)).'</a>
+							<a class="active" ' . $1 .' </a>
 						</li>';
-				} elsif ($1 == 1000) {
+				} elsif ($1 == 300) {
 						$naviBar .= '<li>
 										<a class="menu">...</a>
 									</li>
@@ -62,23 +65,24 @@ sub generateNavigationBar {
 						<div class="hidden-menu">
 							<ul>
 								<li>
-									<a class="active"> Page '.$1.'-'.($1+($files_per_segment - 1)).'</a>
+									<a class="active"> '. $1 . '</a>
 								</li>';
 				} else {
 						$naviBar .= '
 						<li>
-							<a class="active"> Page '.$1.'-'.($1+($files_per_segment - 1)).'</a>
+							<a class="active"> ' . $1 . '</a>
 						</li>';
 				}
 			} else {
 			    $page =~ s/index/1/; # index is page 1
 				$page =~ /(\d+)/;
-				if ($1 < 1000){
+				
+				if ($1 < 300){
 					$naviBar .= '
 				<li>
-					<a href="'. (($1 eq "1") ? "output_index.html" : $page).'"> Page '.$1.'-'.($1+($files_per_segment - 1)).' </a>
-				</li>';}
-				elsif ($1 == 1000) {
+					<a href="'. (($1 eq "1") ? "output_index.html" : $page).'"> '.$1.' </a>
+				</li>';
+				} elsif ($1 == 300) {
 					$naviBar .= '<li>
 									<a class="menu">...</a>
 								</li>
@@ -86,11 +90,11 @@ sub generateNavigationBar {
 						</ul>
 							</div>
 							<div class="hidden-menu"><ul>
-										<li><a href="'. (($1 eq "1") ? "output_index.html" : $page).'">Page '.$1.'-'.($1+($files_per_segment - 1)).'</a></li>';
+										<li><a href="'. (($1 eq "1") ? "output_index.html" : $page).'"> '.$1.'</a></li>';
 				} else {
 					$naviBar .= '
 							<li>
-								<a href="'. (($1 eq "1") ? "output_index.html" : $page).'">Page '.$1.'-'.($1+($files_per_segment - 1)).'</a>
+								<a href="'. (($1 eq "1") ? "output_index.html" : $page).'"> '.$1.'</a>
 							</li>';
 					}
 			}   
@@ -228,6 +232,7 @@ sub generate {
 			open (RAND, ">", ".\\$dirname\\GalleryHTML\\random_gallery.html");
 			# HEAD
 			my $buffer = '<html><head><link rel="stylesheet" href="../../main.css" type="text/css">';
+			$buffer .= generateNavigationBar(30, 'random_gallery.html');
 			
 			my $asJSarray =  Dumper $picture_ref->{pictures};
 			$asJSarray =~ s/.* = /var pictures = /;
@@ -256,6 +261,7 @@ sub generate {
 			print GEN "</tr></table></body></html>";
 			close (GEN);
 	closedir(SUB);
+	$picture_ref->{pictures} = [];
 	return $file_index;
 }
 
