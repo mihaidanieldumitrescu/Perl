@@ -1,6 +1,4 @@
-use strict;
-use warnings;
-use Data::Dumper;
+use strict; use warnings; use Data::Dumper;
 
 use POSIX qw(strftime);
 use File::Copy;
@@ -102,7 +100,7 @@ sub generateNavigationBar {
 		$naviBar.="
 	        </ul>
 	</div>\n";
-		print $naviBar;
+		#print $naviBar;
 	
 	return $naviBar;
 }
@@ -241,7 +239,7 @@ sub generate {
 							document.write ('<table><tr>');
 							for (var i =0; i < $files_per_segment; i++){
 								imageName = pictures[Math.floor(Math.random()*pictures.length)];
-								document.write (\"<td><img src=\" + \"../Resized/\" + imageName + \" height=\'$heightSize\'></img></td>\");	
+								document.write ('<td><img src=\"../Resized/' + imageName + '\" height=\"650\"></img></td>');	
 							}
 							document.write ('</tr></table>');
 			  			</script>";
