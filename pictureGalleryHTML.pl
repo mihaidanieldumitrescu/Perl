@@ -4,7 +4,7 @@ use POSIX qw(strftime);
 use File::Copy;
   
 my @filelist;
-my $heightSize = 650;
+my $heightSize = 1000;
 my $files_per_segment=30;
 
 my $picture_ref = {	
@@ -106,7 +106,18 @@ sub generateNavigationBar {
 }
 
 sub main {
+	
+	my $targetDir = $ARGV[0];
+	print  "\n";	 
+	unless ( defined ( $targetDir ) and  -e $targetDir)  {
+		die "$0 <Target Dir> \n Target dir not specified or non existing!\n";
+	} else { 
+		print "Switching to dir '$targetDir' ... \n\n";
+	 	chdir ( $targetDir );
+	}
+	
 
+	
 	#generating index file first, list of all picture directories
 	open (OUT, ">", "index.html");
 	print OUT generatePageHeader();
@@ -239,7 +250,7 @@ sub generate {
 							document.write ('<table><tr>');
 							for (var i =0; i < $files_per_segment; i++){
 								imageName = pictures[Math.floor(Math.random()*pictures.length)];
-								document.write ('<td><img src=\"../Resized/' + imageName + '\" height=\"650\"></img></td>');	
+								document.write ('<td><img src=\"../Resized/' + imageName + '\" height=\"$heightSize\"></img></td>');	
 							}
 							document.write ('</tr></table>');
 			  			</script>";
